@@ -45,5 +45,17 @@ bool gbit(uc _src,int pos)
 
 void sbit(uc &_des,bool _val,int pos)
 {
-	
+	bool b[8]={0};
+	for(int i=0;i<8;i++)
+	{
+		b[i]=gbit(_des,i);
+	}
+	b[pos]=_val;
+	_des=0;
+	int k=1;
+	for(int i=0;i<8;i++)
+	{
+		_des+=k*b[i];
+		k*=2;
+	}
 }
