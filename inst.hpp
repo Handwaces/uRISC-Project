@@ -17,6 +17,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>. 
 */
 
+#include "nop.hpp"
+
 typedef unsigned char uc;
 
 void lgu(uc a,uc b,uc s,uc &f)
@@ -74,8 +76,9 @@ void lgu(uc a,uc b,uc s,uc &f)
 	}
 }
 
-void aluwc(uc a,uc b,uc s,uc &f)
+void aluwc(uc a,uc b,uc s,uc &fi)
 {
+	int f=0;
 	switch(s)
 	{
 		case 0:
@@ -127,10 +130,13 @@ void aluwc(uc a,uc b,uc s,uc &f)
 			f=a+1;
 			break;
 	}
+	if(f>=256) sbit(reg[15],1,1);
+	fi=f;
 }
 
-void alunc(uc a,uc b,uc s,uc &f)
+void alunc(uc a,uc b,uc s,uc &fi)
 {
+	int f=0;
 	switch(s)
 	{
 		case 0:
@@ -182,9 +188,51 @@ void alunc(uc a,uc b,uc s,uc &f)
 			f=a;
 			break;
 	}
+	if(f>=256) sbit(reg[15],1,1);
+	fi=f;
 }
 
 void alu(uc a,uc b,uc s,uc &f)
 {
-	
+	bool cn=gbit(reg[15],0);
+	if(cn==1) aluwc(a,b,s,f);
+	else alunc(a,b,s,f);
+	if(l4bit(f)==15) sbit(reg[15],1,2);
+	if(h4bit(f)==15) sbit(reg[15],1,3);
+}
+
+void mrd(uc &a,uc b)
+{
+	uc ds=reg[14];
+	a=mem[ds*256+b];
+}
+
+void mwt(uc a,uc b)
+{
+	uc ds=reg[14];
+	mem[ds*256+b]=a;
+}
+
+void ior(uc &a,uc b)
+{
+	uc ds=reg[14];
+	//Porcess inside IO port
+	if(ds*256+b==0) a=getchar();
+}
+
+void iow(uc a,uc b)
+{
+	uc ds=reg[14];
+	//Porcess inside IO port
+	if(ds*256+b==0) putchar(a);
+}
+
+void imm(uc &des,u val)
+{
+	des=val;
+}
+
+void nop()
+{
+	__nop();
 }
