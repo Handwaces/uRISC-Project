@@ -199,6 +199,7 @@ void alu(uc a,uc b,uc s,uc &f)
 	else alunc(a,b,s,f);
 	if(l4bit(f)==15) sbit(reg[15],1,2);
 	if(h4bit(f)==15) sbit(reg[15],1,3);
+	//No end.
 }
 
 void mrd(uc &a,uc b)
@@ -235,4 +236,46 @@ void imm(uc &des,u val)
 void nop()
 {
 	__nop();
+}
+
+void hlt()
+{
+	cout<<"Program exited."<<endl;
+}
+
+void jmp(uc _seg,uc _des,uc &cb,uc &pc)
+{
+	cb=_seg;
+	pc=_des;
+}
+
+void jeq(uc _diga,uc _digb,uc _des,uc pc)
+{
+	if(_diga==_digb) pc=_des;
+}
+
+void jne(uc _diga,uc _digb,uc _des,uc pc)
+{
+	if(_diga!=_digb) pc=_des;
+}
+
+void mov(uc _from,uc &_des)
+{
+	_des=_from;
+}
+
+void err(uc code)
+{
+	cout<<"Program ERROR: Error#"<<code<<"."<<endl;
+	exit(8000);
+}
+
+void shl(uc _src,uc _p,uc &_des)
+{
+	_des=_src<<_p;
+}
+
+void shr(uc _src,uc _p,uc &_des)
+{
+	_des=_src>>_p;
 }
