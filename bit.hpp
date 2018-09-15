@@ -60,7 +60,7 @@ void sbit(uc &_des,bool _val,int pos)
 	}
 	*/
 	uc a=1;
-	a<<pos;
+	a=a<<pos;
 	if(_val==true)
 	{
 		_des|=a;
